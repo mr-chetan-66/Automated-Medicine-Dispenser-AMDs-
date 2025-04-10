@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "20869838046",
+    "project_id": "medissa-aa670",
+    "storage_bucket": "medissa-aa670.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20869838046:android:b203c7e3c50d5d99847e4f",
+        "android_client_info": {
+          "package_name": "com.tsa.medissa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2OV5AtvISjbOhnxvVb05t7K4IlawzjnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

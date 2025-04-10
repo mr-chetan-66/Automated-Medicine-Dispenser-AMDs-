@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Primary Color Palette -->
+    <color name="md_theme_primary">#3366FF</color>
+    <color name="md_theme_primary_variant">#1A43CC</color>
+    <color name="md_theme_on_primary">#FFFFFF</color>
+
+    <!-- Background Colors -->
+    <color name="md_theme_background">#F0F4F8</color>
+    <color name="md_theme_surface">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="md_theme_text_primary">#1A1A2E</color>
+    <color name="md_theme_text_secondary">#6E6E80</color>
+    <color name="md_theme_text_disabled">#B0B0C0</color>
+
+    <!-- Card and Button Colors -->
+    <color name="md_theme_card_background">#FFFFFF</color>
+    <color name="md_theme_card_stroke">#E0E0E0</color>
+
+    <!-- Accent Colors -->
+    <color name="md_theme_accent_green">#4CAF50</color>
+    <color name="md_theme_accent_red">#F44336</color>
+
+    <color name="md_theme_divider">#E5E7EB</color>
+</resources>
