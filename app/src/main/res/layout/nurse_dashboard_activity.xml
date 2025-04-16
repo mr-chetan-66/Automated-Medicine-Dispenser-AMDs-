@@ -120,6 +120,36 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Set Pill Time Card -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.App.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_large">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Set Pill Time"
+                        style="@style/TextAppearance.App.Title" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSetPillSchedule"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:text="Set Now"
+                        style="@style/Widget.App.Button" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
             <!-- SOS Notifications Card -->
             <com.google.android.material.card.MaterialCardView
                 style="@style/Widget.App.CardView"

@@ -2,50 +2,110 @@ package com.tsa.medissa
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
-import com.tsa.medissa.databinding.ActivitySetTimeBinding
+import com.tsa.medissa.databinding.ActivitySetPillScheduleBinding
 
-class SetTimeActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySetTimeBinding
+class SetPillScheduleFragment : Fragment() {
+
+    private var _binding: ActivitySetPillScheduleBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var database: DatabaseReference
-    private var currentCompartmentCount = 0
+    private var selectedPatientId: String? = null
+    private var selectedMachineId: String? = null
+
     private val MAX_COMPARTMENTS = 15
+    private var currentCompartmentCount = 0
+
     private val adapter = PillTimeAdapter { pillTime ->
         showEditDeleteDialog(pillTime)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySetTimeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ActivitySetPillScheduleBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        // Initialize Firebase
-        database = FirebaseDatabase.getInstance().reference.child("pillTimes")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setupUI()
-        loadExistingPillTimes()
+        loadPatientsIntoSpinner()
     }
 
     private fun setupUI() {
         updateCompartmentCounter()
 
-        // Setup RecyclerView
-        binding.scheduledTimesList.apply {
-            layoutManager = LinearLayoutManager(this@SetTimeActivity)
-            adapter = this@SetTimeActivity.adapter
-        }
+        binding.scheduledTimesList.layoutManager = LinearLayoutManager(requireContext())
+        binding.scheduledTimesList.adapter = adapter
 
-        // Setup save button
         binding.btnSaveTime.setOnClickListener {
-            savePillTimeToFirebase()
+            if (selectedMachineId != null) {
+                savePillTimeToFirebase()
+            } else {
+                showMessage("Please select a patient")
+            }
         }
     }
 
-    private fun updateCompartmentCounter() {
-        binding.txtCompartmentCount.text = "$currentCompartmentCount/$MAX_COMPARTMENTS"
+    private fun loadPatientsIntoSpinner() {
+        val ref = FirebaseDatabase.getInstance().getReference("patients")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val patientList = mutableListOf<Pair<String, String>>()
+
+                for (child in snapshot.children) {
+                    val id = child.key ?: continue
+                    val name = child.child("name").getValue(String::class.java) ?: continue
+                    patientList.add(Pair(id, name))
+                }
+
+                val spinnerItems = patientList.map { it.second }
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, spinnerItems)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                binding.spinnerPatientList.adapter = adapter
+
+                binding.spinnerPatientList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                        selectedPatientId = patientList[position].first
+                        loadMachineIdForPatient(selectedPatientId!!)
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {}
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                showMessage("Failed to load patients: ${error.message}")
+            }
+        })
+    }
+
+    private fun loadMachineIdForPatient(patientId: String) {
+        val db = FirebaseDatabase.getInstance().reference
+        db.child("patients").child(patientId).child("machineId")
+            .get().addOnSuccessListener { snapshot ->
+                selectedMachineId = snapshot.value.toString()
+                binding.textViewMachineId.text = "Machine ID: $selectedMachineId"
+
+                database = FirebaseDatabase.getInstance().reference
+                    .child("pillSchedules").child(selectedMachineId!!).child("pillList")
+
+                loadExistingPillTimes()
+            }
+            .addOnFailureListener {
+                showMessage("Failed to load machine ID")
+            }
     }
 
     private fun savePillTimeToFirebase() {
@@ -64,28 +124,24 @@ class SetTimeActivity : AppCompatActivity() {
             hour = binding.timePicker.hour,
             minute = binding.timePicker.minute,
             medicationName = medicationName,
-            compartmentNumber = currentCompartmentCount + 1
+            compartmentNumber = currentCompartmentCount + 1,
+            timestamp = System.currentTimeMillis()
         )
 
-        // Log data being saved
-        Log.d("Firebase", "Saving data: $pillTime")
-
         database.push().setValue(pillTime)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    currentCompartmentCount++
-                    updateCompartmentCounter()
-                    clearInputs()
-                    showMessage("Pill time saved successfully")
-                } else {
-                    showMessage("Failed to save: ${task.exception?.message}")
-                    Log.e("Firebase", "Error saving data: ${task.exception?.message}")
-                }
+            .addOnSuccessListener {
+                currentCompartmentCount++
+                updateCompartmentCounter()
+                clearInputs()
+                showMessage("Pill time saved successfully")
+            }
+            .addOnFailureListener {
+                showMessage("Failed to save: ${it.message}")
             }
     }
 
     private fun loadExistingPillTimes() {
-        Log.d("Firebase", "Loading existing pill times")
+        if (selectedMachineId == null) return
 
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -101,21 +157,17 @@ class SetTimeActivity : AppCompatActivity() {
 
                 adapter.submitList(pillTimes)
                 updateCompartmentCounter()
-
-                // Log data loaded
-                Log.d("Firebase", "Data loaded: ${snapshot.value}")
             }
 
             override fun onCancelled(error: DatabaseError) {
                 showMessage("Failed to load pill times: ${error.message}")
-                Log.e("Firebase", "Error loading data: ${error.message}")
             }
         })
     }
 
     private fun showEditDeleteDialog(pillTime: PillTime) {
         val options = arrayOf("Edit", "Delete")
-        androidx.appcompat.app.AlertDialog.Builder(this)
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
             .setTitle("Manage Pill Time")
             .setItems(options) { _, which ->
                 when (which) {
@@ -127,13 +179,11 @@ class SetTimeActivity : AppCompatActivity() {
     }
 
     private fun editPillTime(pillTime: PillTime) {
-        Log.d("Firebase", "Editing pill time: $pillTime")
-
         binding.edtMedicationName.setText(pillTime.medicationName)
         binding.timePicker.hour = pillTime.hour
         binding.timePicker.minute = pillTime.minute
-
         binding.btnSaveTime.text = "Update Schedule"
+
         binding.btnSaveTime.setOnClickListener {
             updatePillTime(pillTime)
         }
@@ -148,9 +198,6 @@ class SetTimeActivity : AppCompatActivity() {
             timestamp = oldPillTime.timestamp
         )
 
-        // Log the update process
-        Log.d("Firebase", "Updating pill time: $newPillTime")
-
         database.orderByChild("timestamp")
             .equalTo(oldPillTime.timestamp.toDouble())
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -162,23 +209,19 @@ class SetTimeActivity : AppCompatActivity() {
                                 resetSaveButton()
                                 clearInputs()
                             }
-                            .addOnFailureListener { e ->
-                                showMessage("Failed to update: ${e.message}")
-                                Log.e("Firebase", "Error updating data: ${e.message}")
+                            .addOnFailureListener {
+                                showMessage("Update failed: ${it.message}")
                             }
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     showMessage("Update cancelled: ${error.message}")
-                    Log.e("Firebase", "Update cancelled: ${error.message}")
                 }
             })
     }
 
     private fun deletePillTime(pillTime: PillTime) {
-        Log.d("Firebase", "Deleting pill time: $pillTime")
-
         database.orderByChild("timestamp")
             .equalTo(pillTime.timestamp.toDouble())
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -190,18 +233,20 @@ class SetTimeActivity : AppCompatActivity() {
                                 updateCompartmentCounter()
                                 showMessage("Schedule deleted successfully")
                             }
-                            .addOnFailureListener { e ->
-                                showMessage("Failed to delete: ${e.message}")
-                                Log.e("Firebase", "Error deleting data: ${e.message}")
+                            .addOnFailureListener {
+                                showMessage("Delete failed: ${it.message}")
                             }
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     showMessage("Delete cancelled: ${error.message}")
-                    Log.e("Firebase", "Delete cancelled: ${error.message}")
                 }
             })
+    }
+
+    private fun updateCompartmentCounter() {
+        binding.txtCompartmentCount.text = "$currentCompartmentCount/$MAX_COMPARTMENTS"
     }
 
     private fun resetSaveButton() {
@@ -216,7 +261,12 @@ class SetTimeActivity : AppCompatActivity() {
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        Log.d("Firebase", message)  // Log the message for debugging
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Log.d("SetPillSchedule", message)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

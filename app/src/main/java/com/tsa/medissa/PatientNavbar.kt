@@ -33,7 +33,7 @@ class PatientNavbar : AppCompatActivity() {
     private var profileFragment: PatientProfile? = null
 
     private fun loadFragment(newFragment: Fragment) {
-        val fragmentToLoad: Fragment = if (newFragment is HomeFragment && profileFragment != null) {
+        val fragmentToLoad: Fragment = if (newFragment is NurseDashboardFragment && profileFragment != null) {
             profileFragment!! // Safe to use !! here because we checked for null
         } else {
             if (newFragment is PatientProfile) profileFragment = newFragment

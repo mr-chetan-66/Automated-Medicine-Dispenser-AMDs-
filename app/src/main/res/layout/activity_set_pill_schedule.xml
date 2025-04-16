@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Patient Selection Dropdown -->
+    <Spinner
+        android:id="@+id/spinnerPatientList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Machine ID Display -->
+    <TextView
+        android:id="@+id/textViewMachineId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Machine ID: -"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintTop_toBottomOf="@id/spinnerPatientList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Compartment Counter Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/compartmentCounterCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:cardBackgroundColor="@color/md_theme_surface"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewMachineId"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/txtCompartmentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Time Picker -->
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:timePickerMode="clock"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/compartmentCounterCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Medication Name Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/medicationNameInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Medication Name"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/timePicker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtMedicationName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Scheduled Times List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/scheduledTimesList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintTop_toBottomOf="@id/medicationNameInput"
+        app:layout_constraintBottom_toTopOf="@id/btnSaveTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/btnSaveTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Save Schedule"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -39,6 +42,17 @@ android {
         viewBinding=true
     }
 
+    defaultConfig {
+        // Other config...
+
+        val apiKeyFile = rootProject.file("api-keys.properties")
+        if (apiKeyFile.exists()) {
+            val props = Properties().apply {
+                load(FileInputStream(apiKeyFile))
+            }
+            buildConfigField("String", "API_KEY", "\"${props["API_KEY"]}\"")
+        }
+    }
 }
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -55,6 +69,12 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.swiperefreshlayout)
+    implementation("com.google.mlkit:barcode-scanning:17.1.0")
+    implementation ("androidx.camera:camera-core:1.4.2")
+    implementation ("androidx.camera:camera-camera2:1.4.2")
+    implementation ("androidx.camera:camera-lifecycle:1.4.2")
+    implementation ("androidx.camera:camera-view:1.4.2")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -3,7 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.tsa.medissa">
 
+    <!-- ✅ Required permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- ✅ Camera feature hint -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,25 +20,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedicineDispenser"
         tools:targetApi="31">
+
+        <!-- Launcher Activity -->
         <activity
-            android:name="com.tsa.medissa.MainActivity"
+            android:name="com.tsa.medissa.UserTypeMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Auth and role-based Start Activities -->
         <activity android:name="com.tsa.medissa.DoctorLoginActivity" />
         <activity android:name="com.tsa.medissa.NurseLoginActivity" />
         <activity android:name="com.tsa.medissa.PatientLoginActivity" />
-        <activity android:name="com.tsa.medissa.DoctorSignupActivity"/>
-        <activity android:name="com.tsa.medissa.DoctorStart"/>
-        <activity android:name="com.tsa.medissa.NurseSignupActivity"/>
-        <activity android:name="com.tsa.medissa.NurseStart"/>
-        <activity android:name="com.tsa.medissa.PatientStart"/>
-        <activity android:name="com.tsa.medissa.SetTimeActivity"/>
-        <activity android:name="com.tsa.medissa.PatientNavbar"/>
+        <activity android:name="com.tsa.medissa.DoctorSignupActivity" />
+        <activity android:name="com.tsa.medissa.NurseSignupActivity" />
+        <activity android:name="com.tsa.medissa.DoctorStart" />
+        <activity android:name="com.tsa.medissa.NurseStart" />
+        <activity android:name="com.tsa.medissa.PatientStart" />
+        <activity android:name="com.tsa.medissa.PatientNavbar" />
 
+        <!-- Project Core Feature Activities -->
+        <activity
+            android:name="com.tsa.medissa.QRScannerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name="com.tsa.medissa.NurseNavbar" />
     </application>
 
 </manifest>
