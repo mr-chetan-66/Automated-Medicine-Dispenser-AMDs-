@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorPrimaryVariant">@color/md_theme_primary_variant</item>
+        <item name="colorOnPrimary">@color/md_theme_on_primary</item>
+
+        <!-- Background colors -->
+        <item name="android:windowBackground">@color/md_theme_background</item>
+        <item name="colorSurface">@color/md_theme_surface</item>
+
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/md_theme_text_primary</item>
+        <item name="android:textColorSecondary">@color/md_theme_text_secondary</item>
+
+        <!-- Material Button Styles -->
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
+    </style>
+
+    <!-- Custom Material Button Style -->
+    <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/md_theme_primary</item>
+        <item name="android:textColor">@color/md_theme_on_primary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="elevation">4dp</item>
+    </style>
+
+    <!-- Card View Style -->
+    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardElevation">8dp</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardBackgroundColor">@color/md_theme_card_background</item>
+    </style>
+
+    <!-- Typography Styles -->
+    <style name="TextAppearance.App.Title" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/md_theme_text_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.App.Subtitle" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/md_theme_text_secondary</item>
+    </style>
+
+    <style name="TitleTextAppearance" parent="TextAppearance.AppCompat.Title">
+        <item name="android:fontFamily">sans-serif-smallcaps</item>
+    </style>
+
+    <!-- Time Picker Theme -->
+    <style name="TimePickerTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_on_primary</item>
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:numbersTextColor">@color/md_theme_text_primary</item>
+        <item name="android:numbersSelectorColor">@color/md_theme_primary</item>
+        <item name="android:numbersBackgroundColor">@color/md_theme_surface</item>
+    </style>
+
+    <!-- List Item Style for Scheduled Times -->
+    <style name="ScheduledTimeItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">@color/md_theme_surface</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="CircleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>

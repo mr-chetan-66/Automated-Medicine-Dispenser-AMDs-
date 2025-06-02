@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background">
+
+    <!-- Top Decoration -->
+    <View
+        android:id="@+id/decorationTop"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="@drawable/circle_decoration"
+        android:backgroundTint="@color/md_theme_accent_green"
+        android:alpha="0.2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Centered Group -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/centerGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnDoctorStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tvDoctorTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:text="Welcome, Doctor"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/TextAppearance.App.Title" />
+
+        <TextView
+            android:id="@+id/tvDoctorQuote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="24dp"
+            android:text="Medicine cures diseases, but only doctors can cure patients"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@id/tvDoctorTitle"
+            style="@style/TextAppearance.App.Subtitle" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            style="@style/Widget.App.CardView"
+            app:layout_constraintTop_toBottomOf="@id/tvDoctorQuote">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Key Features for Doctors:"
+                    android:textStyle="bold"
+                    style="@style/TextAppearance.App.Subtitle" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:drawablePadding="8dp"
+                    android:text="• Monitor patient medication adherence in real-time"
+                    style="@style/TextAppearance.App.Subtitle" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:drawablePadding="8dp"
+                    android:text="• Adjust prescriptions and dosage remotely"
+                    style="@style/TextAppearance.App.Subtitle" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:drawablePadding="8dp"
+                    android:text="• Receive alerts for critical patient updates"
+                    style="@style/TextAppearance.App.Subtitle" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Get Started Button at the Bottom -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDoctorStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="Get Started"
+        style="@style/Widget.App.Button"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
