@@ -41,6 +41,7 @@
         <activity android:name="com.tsa.medissa.NurseStart" />
         <activity android:name="com.tsa.medissa.PatientStart" />
         <activity android:name="com.tsa.medissa.PatientNavbar" />
+        <activity android:name="com.tsa.medissa.ForgotPasswordNurseActivity" />
 
         <!-- Project Core Feature Activities -->
         <activity
